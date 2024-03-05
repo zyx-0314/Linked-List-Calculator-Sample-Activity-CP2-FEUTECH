@@ -6,7 +6,7 @@ struct DataHolder
     // Member Variable
     const static int MAX = 2;
     double val[MAX] = { 0, 0 }, result = 0;
-    std::string mathOperator;
+    std::string mathOperator = "";
 
     // Member Function
     void Display()
