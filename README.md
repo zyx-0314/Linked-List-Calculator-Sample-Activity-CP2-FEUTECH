@@ -60,7 +60,11 @@ This is the system created to understand the use cases of Linked List. Having Mu
 
 This is the system created to understand the use cases of Linked List. Having Multiple Versions and different level of knowledge application it goals to help student understand Linked List Logic and possibilites it could open with different scenarios and situations and limits.
 
-### Version 1
+### Full Calculator (Still on Works)
+Versions:
+- with Explanation
+- withou explanation
+
 
 #### Features
 - Calculation of MDAS
