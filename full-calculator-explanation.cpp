@@ -1,33 +1,34 @@
 #include <iostream>
+#include <string>
 
 struct DataHolder
 {
     // Member Variable
-	const static int MAX = 2;
-	double val[MAX], result;
-	std::string mathOperator;
+    const static int MAX = 2;
+    double val[MAX] = { 0, 0 }, result = 0;
+    std::string mathOperator;
 
     // Member Function
-	void Display()
-	{
-	    // will display when the mathOperator is over 1 character
+    void Display()
+    {
+        // will display when the mathOperator is over 1 character
             // reason to catch the error created in division in case
-	    if (this->mathOperator.length() != 1) std::cout << this->mathOperator << "\n";
-	    // else display in format
-	    else std::cout << this->val[0] << " " << this->mathOperator << " " << this->val[1] << " = " << this->result << "\n";
-	}
+        if (this->mathOperator.length() != 1) std::cout << this->mathOperator << "\n";
+        // else display in format
+        else std::cout << this->val[0] << " " << this->mathOperator << " " << this->val[1] << " = " << this->result << "\n";
+    }
 };
 
 // Single LinkedList
 struct History
 {
-	// Address
-	History* next = NULL;
+    // Address
+    History* next = NULL;
 
-	// Data
+    // Data
         // as you can see it is creating a new data in heap already
             // reason it make sure that every node has prepared holder when needed
-	DataHolder* data = new DataHolder;
+    DataHolder* data = new DataHolder;
 
 };
 
@@ -44,6 +45,8 @@ void ClearHistory(History*&);
 void InputValue(History*&);
 void Computation(int, History*&);
 int HistoryFunctionalities(int&, History*&, History*&);
+int UpdateHistory();
+
 
 // Math Formulas
 double Add(double[], const int);
@@ -55,19 +58,19 @@ int main()
 {
     int choice, historyCounter = 0;
     History* temp = NULL; // this will create a temporary holder of datas
-	History* head = NULL,* tail = NULL; // this serves as your tracker of head and tail
+    History* head = NULL, * tail = NULL; // this serves as your tracker of head and tail
 
-	while (true)
-	{
-		switch (MainMenu())
-		{
-		case 1:
-			do
+    while (true)
+    {
+        switch (MainMenu())
+        {
+        case 1:
+            do
             {
-				choice = MathMenu();
+                choice = MathMenu();
 
-				// if choice is 0(false) then it will be converted to true then will break
-				if (!choice) break;
+                // if choice is 0(false) then it will be converted to true then will break
+                if (!choice) break;
 
                 InputValue(temp);
 
@@ -76,49 +79,48 @@ int main()
                 AddHistory(head, tail, temp);
 
                 historyCounter++;
-            }
-			while (true);
-			break;
-		case 2:
+            } while (true);
+            break;
+        case 2:
             HistoryFunctionalities(historyCounter, head, tail);
-			break;
-		case 0:
-			exit(0);
-		default:
-			break;
-		}
-	}
+            break;
+        case 0:
+            exit(0);
+        default:
+            break;
+        }
+    }
 }
 
 int MainMenu()
 {
-	int choice;
+    int choice;
 
-	do
-	{
-		std::cout
-			<< "1. Calculator\n"
-			<< "2. History\n"
-			<< "\n"
-			<< "0. Exit\n"
-			<< "\n"
-			<< ":: ";
-		std::cin >> choice;
-    // the condition provided below states that if choice is lower than 0 or higher than 3 then its invalid
-        // change it depends on the options
-	} while (choice < 0 || choice > 2);
+    do
+    {
+        std::cout
+            << "1. Calculator\n"
+            << "2. History\n"
+            << "\n"
+            << "0. Exit\n"
+            << "\n"
+            << ":: ";
+        std::cin >> choice;
+        // the condition provided below states that if choice is lower than 0 or higher than 3 then its invalid
+            // change it depends on the options
+    } while (choice < 0 || choice > 2);
 
-	system("cls");
+    system("cls");
 
-	return choice;
+    return choice;
 }
 
 int MathMenu()
 {
-	int choice;
+    int choice;
 
-	do
-	{
+    do
+    {
         std::cout
             << "1. Add\n"
             << "2. Subtract\n"
@@ -128,19 +130,19 @@ int MathMenu()
             << "\n"
             << ":: ";
         std::cin >> choice;
-	} while (choice < 0 || choice > 4);
+    } while (choice < 0 || choice > 4);
 
-	system("cls");
+    system("cls");
 
-	return choice;
+    return choice;
 }
 
 int HistoryMenu(int currentPage, int lastPage, int historyCounter)
 {
-	int choice = 0, instructionCounter = 0;
-	std::string instructions = "";
+    int choice = 0, instructionCounter = 0;
+    std::string instructions = "";
 
-	if (historyCounter)
+    if (historyCounter)
     {
         // the logic here is that when in first page it will not show prev
         if (currentPage != 1)
@@ -156,8 +158,8 @@ int HistoryMenu(int currentPage, int lastPage, int historyCounter)
         instructions.append(std::to_string(++instructionCounter) + ". Delete History | ");
     }
 
-	do
-	{
+    do
+    {
         std::cout
             << instructions << "0. Exit\n\n"
             << ":: ";
@@ -166,19 +168,19 @@ int HistoryMenu(int currentPage, int lastPage, int historyCounter)
         system("cls");
 
         if (!choice) return 0;
-    // this changes depends on how many instructions is given
-	} while (choice < 1 && choice > instructionCounter);
+        // this changes depends on how many instructions is given
+    } while (choice < 1 && choice > instructionCounter);
 
-	system("cls");
+    system("cls");
 
-	// this sets on different configuration of returns
+    // this sets on different configuration of returns
         // set when their is not prev or next
-	if (currentPage == 1 && currentPage == lastPage) return choice + 2;
-        // set when their is only next
-	else if (currentPage == 1) return ++choice;
-        // set when their is only prev
-	else if (currentPage == lastPage && choice != 1) return ++choice;
-        // default
+    if (currentPage == 1 && currentPage == lastPage) return choice + 2;
+    // set when their is only next
+    else if (currentPage == 1) return ++choice;
+    // set when their is only prev
+    else if (currentPage == lastPage && choice != 1) return ++choice;
+    // default
     else return choice;
 }
 
@@ -194,14 +196,14 @@ void AddHistory(History*& head, History*& tail, History*& temp)
     // then the following is the logic on how logging happens
 
     // if head is empty
-	if (!head)
-	    // copy the address from temp to head
+    if (!head)
+        // copy the address from temp to head
             // since it will be the first node
-		head = temp;
-	// if head is not empty
-	else
-	    // since the there is new node(temp) addition to the LinkedList you need to inform the old tail of the temp(which is the new node)
-		tail->next = temp;
+        head = temp;
+    // if head is not empty
+    else
+        // since the there is new node(temp) addition to the LinkedList you need to inform the old tail of the temp(which is the new node)
+        tail->next = temp;
 
     // set the new node(temp) as the tail
     tail = temp;
@@ -209,8 +211,8 @@ void AddHistory(History*& head, History*& tail, History*& temp)
     // set the next to null since its the tail node
     tail->next = NULL;
 
-	system("pause");
-	system("cls");
+    system("pause");
+    system("cls");
 }
 
 void DisplayHistory(History* head, int currentPage, int lastPage)
@@ -227,7 +229,7 @@ void DisplayHistory(History* head, int currentPage, int lastPage)
 
         // this part is the code for traversal until tail is meet
             // you can identify tail when the head is NULL
-        while(head && counter < 5)
+        while (head && counter < 5)
         {
             // this is used to display only the required ones
             if (startingIndex <= i)
@@ -249,7 +251,7 @@ void DisplayHistory(History* head, int currentPage, int lastPage)
 
 void ClearHistory(History*& head)
 {
-    History* temp,* current = head;
+    History* temp = NULL, * current = head;
 
     // the condition sets that it will be true when the head is NULL
     if (!head)
@@ -257,7 +259,7 @@ void ClearHistory(History*& head)
     else
     {
         // this is also way of traversal but deletes every nodes
-        while(temp)
+        while (temp)
         {
             // temp will hold the next node
             temp = current->next;
@@ -279,65 +281,65 @@ void InputValue(History*& history)
 
     // the parameter is coming from MAX of Node Data Holder which will make the same MAX for all
     for (int i = 0; i < history->data->MAX; i++)
-	{
-		std::cout << "Value " << i + 1 << ":";
-		std::cin >> history->data->val[i];
-	}
+    {
+        std::cout << "Value " << i + 1 << ":";
+        std::cin >> history->data->val[i];
+    }
 }
 
 void Computation(int choice, History*& history)
 {
     switch (choice)
-	{
-	case 1:
-		history->data->mathOperator = "+";
-		history->data->result = Add(
-                                history->data->val,
-                                history->data->MAX
-                        );
-		break;
-	case 2:
-		history->data->mathOperator = "-";
-		history->data->result = Subtract(
-                                history->data->val,
-                                history->data->MAX
-                        );
-		break;
-	case 3:
-		history->data->mathOperator = "*";
-		history->data->result = Multiplication(
-                                history->data->val,
-                                history->data->MAX
-                        );
-		break;
-	case 4:
-		if (!history->data->val[1])
-		{
-			std::cout << "Division Input Error!\n";
-			history->data->mathOperator = "Division Input Error!";
-			break;
-		}
-		history->data->mathOperator = "/";
-		history->data->result = Division(
-                                history->data->val,
-                                history->data->MAX
-                        );
-		break;
-	default:
-		break;
-	}
+    {
+    case 1:
+        history->data->mathOperator = "+";
+        history->data->result = Add(
+            history->data->val,
+            history->data->MAX
+        );
+        break;
+    case 2:
+        history->data->mathOperator = "-";
+        history->data->result = Subtract(
+            history->data->val,
+            history->data->MAX
+        );
+        break;
+    case 3:
+        history->data->mathOperator = "*";
+        history->data->result = Multiplication(
+            history->data->val,
+            history->data->MAX
+        );
+        break;
+    case 4:
+        if (!history->data->val[1])
+        {
+            std::cout << "Division Input Error!\n";
+            history->data->mathOperator = "Division Input Error!";
+            break;
+        }
+        history->data->mathOperator = "/";
+        history->data->result = Division(
+            history->data->val,
+            history->data->MAX
+        );
+        break;
+    default:
+        break;
+    }
 }
 
 int HistoryFunctionalities(int& historyCounter, History*& head, History*& tail)
 {
     History* currentNode = head;
-    int currentPage = 1, lastPage = (historyCounter - 1)/5 + 1;
+    int currentPage = 1, lastPage = (historyCounter - 1) / 5 + 1;
 
-    while(currentPage <= lastPage)
+    while (currentPage <= lastPage)
     {
         DisplayHistory(currentNode, currentPage, lastPage);
 
-        switch(HistoryMenu(currentPage, lastPage, historyCounter))
+        switch (HistoryMenu(currentPage, lastPage, historyCounter))
         {
         case 1: // this will prev the page
             currentPage--;
@@ -363,6 +365,8 @@ int HistoryFunctionalities(int& historyCounter, History*& head, History*& tail)
             return 0;
         }
     };
+
+    return 0;
 }
 
 double Add(double val[], const int MAX)
