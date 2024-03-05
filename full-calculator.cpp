@@ -207,7 +207,7 @@ void DisplayHistory(History* head, int currentPage, int lastPage)
 
 void ClearHistory(History*& head)
 {
-    History* temp,* current = head;
+    History* temp = NULL,* current = head;
 
     if (!head)
         std::cout << "-- No History Yet! --\n\n";
