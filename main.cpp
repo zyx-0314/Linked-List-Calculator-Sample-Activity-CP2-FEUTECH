@@ -34,14 +34,16 @@ struct History
 // Menus
 int MainMenu();
 int MathMenu();
+int HistoryMenu(int, int);
 
 // Functionalities
     // Following Single Responsibility Principle
 void AddHistory(History*&, History*&, History*&);
-void DisplayHistory(History*&);
-void ClearHistory(History*&, History*&);
+void DisplayHistory(History*, int, int);
+void ClearHistory(History*&);
 void InputValue(History*&);
 void Computation(int, History*&);
+int HistoryFunctionalities(int&, History*&, History*&);
 
 // Math Formulas
 double Add(double[], const int);
@@ -51,7 +53,7 @@ double Multiplication(double[], const int);
 
 int main()
 {
-    int choice;
+    int choice, historyCounter = 0;
     History* temp = NULL; // this will create a temporary holder of datas
 	History* head = NULL,* tail = NULL; // this serves as your tracker of head and tail
 
@@ -72,15 +74,14 @@ int main()
                 Computation(choice, temp);
 
                 AddHistory(head, tail, temp);
+
+                historyCounter++;
             }
 			while (true);
 			break;
 		case 2:
-			DisplayHistory(head);
+            HistoryFunctionalities(historyCounter, head, tail);
 			break;
-        case 3:
-            ClearHistory(head, tail);
-            break;
 		case 0:
 			exit(0);
 		default:
@@ -98,7 +99,6 @@ int MainMenu()
 		std::cout
 			<< "1. Calculator\n"
 			<< "2. History\n"
-			<< "3. Clear History\n"
 			<< "\n"
 			<< "0. Exit\n"
 			<< "\n"
@@ -106,7 +106,7 @@ int MainMenu()
 		std::cin >> choice;
     // the condition provided below states that if choice is lower than 0 or higher than 3 then its invalid
         // change it depends on the options
-	} while (choice < 0 || choice > 3);
+	} while (choice < 0 || choice > 2);
 
 	system("cls");
 
@@ -133,6 +133,53 @@ int MathMenu()
 	system("cls");
 
 	return choice;
+}
+
+int HistoryMenu(int currentPage, int lastPage, int historyCounter)
+{
+	int choice = 0, instructionCounter = 0;
+	std::string instructions = "";
+
+	if (historyCounter)
+    {
+        // the logic here is that when in first page it will not show prev
+        if (currentPage != 1)
+            instructions.append(std::to_string(++instructionCounter) + ". Prev | ");
+
+        // while here is that the next will not appear when the current page is the last page
+        if (currentPage != lastPage)
+            instructions.append(std::to_string(++instructionCounter) + ". Next | ");
+
+        // while the following will always show but will adjust depends who is going to appear ahead
+        instructions.append(std::to_string(++instructionCounter) + ". Update a History | ");
+        instructions.append(std::to_string(++instructionCounter) + ". Delete a History | ");
+        instructions.append(std::to_string(++instructionCounter) + ". Delete History | ");
+    }
+
+	do
+	{
+        std::cout
+            << instructions << "0. Exit\n\n"
+            << ":: ";
+        std::cin >> choice;
+
+        system("cls");
+
+        if (!choice) return 0;
+    // this changes depends on how many instructions is given
+	} while (choice < 1 && choice > instructionCounter);
+
+	system("cls");
+
+	// this sets on different configuration of returns
+        // set when their is not prev or next
+	if (currentPage == 1 && currentPage == lastPage) return choice + 2;
+        // set when their is only next
+	else if (currentPage == 1) return ++choice;
+        // set when their is only prev
+	else if (currentPage == lastPage && choice != 1) return ++choice;
+        // default
+    else return choice;
 }
 
 void AddHistory(History*& head, History*& tail, History*& temp)
@@ -166,34 +213,41 @@ void AddHistory(History*& head, History*& tail, History*& temp)
 	system("cls");
 }
 
-void DisplayHistory(History*& head)
+void DisplayHistory(History* head, int currentPage, int lastPage)
 {
-    History* temp = head;
-
-    // the condition sets that it will be true when the temp is NULL
-    if (!temp)
+    int counter = 0, startingIndex = (currentPage - 1) * 5, i = 0;
+    // the condition sets that it will be true when the head is NULL
+    if (!head)
         std::cout << "-- No History Yet! --\n";
     else
     {
-        std::cout << "History\n";
+        std::cout
+            << "Page " << currentPage << " of " << lastPage << "\n\n"
+            << "History\n";
 
         // this part is the code for traversal until tail is meet
-            // you can identify tail when the temp is NULL
-        while(temp)
+            // you can identify tail when the head is NULL
+        while(head && counter < 5)
         {
-            temp->data->Display();
-            temp = temp->next;
+            // this is used to display only the required ones
+            if (startingIndex <= i)
+            {
+                head->data->Display();
+                counter++;
+            }
+            // this will traverse
+            head = head->next;
+
+            // index
+            i++;
         }
 
     }
 
     std::cout << "\n";
-
-    system("pause");
-    system("cls");
 }
 
-void ClearHistory(History*& head, History*& tail)
+void ClearHistory(History*& head)
 {
     History* temp,* current = head;
 
@@ -211,10 +265,6 @@ void ClearHistory(History*& head, History*& tail)
             delete current;
             current = temp;
         }
-
-        // since the whole node is deleted it will reset both head and tail
-        head = NULL;
-        tail = NULL;
 
         std::cout << "-- History Clear! --\n";
     }
@@ -278,28 +328,69 @@ void Computation(int choice, History*& history)
 	}
 }
 
-double Add(double val[], const int MAX) {
+int HistoryFunctionalities(int& historyCounter, History*& head, History*& tail)
+{
+    History* currentNode = head;
+    int currentPage = 1, lastPage = (historyCounter - 1)/5 + 1;
+
+    while(currentPage <= lastPage)
+    {
+        DisplayHistory(currentNode, currentPage, lastPage);
+
+        switch(HistoryMenu(currentPage, lastPage, historyCounter))
+        {
+        case 1: // this will prev the page
+            currentPage--;
+            break;
+        case 2: // this will next the page
+            currentPage++;
+            break;
+        case 3:
+            std::cout << "1";
+            system("pause");
+            return 0;
+        case 4:
+            std::cout << "2";
+            system("pause");
+            return 0;
+        case 5:
+            ClearHistory(head);
+            tail = NULL;
+            head = NULL;
+            system("pause");
+            return 0;
+        case 0:
+            return 0;
+        }
+    };
+}
+
+double Add(double val[], const int MAX)
+{
     double total = 0;
     for (int i = 0; i < MAX; i++)
         total += val[i];
     return total;
 }
 
-double Subtract(double val[], const int MAX) {
+double Subtract(double val[], const int MAX)
+{
     double total = val[0];
     for (int i = 1; i < MAX; i++)
         total -= val[i];
     return total;
 }
 
-double Division(double val[], const int MAX) {
+double Division(double val[], const int MAX)
+{
     double total = val[0];
     for (int i = 1; i < MAX; i++)
         total /= val[i];
     return total;
 }
 
-double Multiplication(double val[], const int MAX) {
+double Multiplication(double val[], const int MAX)
+{
     double total = val[0];
     for (int i = 1; i < MAX; i++)
         total *= val[i];
