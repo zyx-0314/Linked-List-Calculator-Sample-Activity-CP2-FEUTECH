@@ -72,6 +72,7 @@ Versions:
 - Calculation of MDAS
 - Logging of Computations
 - Deleting of Logs
+- Pagination
 
 <br />
 
