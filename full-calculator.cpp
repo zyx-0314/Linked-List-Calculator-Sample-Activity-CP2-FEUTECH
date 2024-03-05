@@ -1,4 +1,5 @@
 #include <iostream>
+#include <string>
 
 struct DataHolder
 {
@@ -315,6 +316,7 @@ int HistoryFunctionalities(int& historyCounter, History*& head, History*& tail)
             return 0;
         }
     };
+    return 0;
 }
 
 double Add(double val[], const int MAX)
