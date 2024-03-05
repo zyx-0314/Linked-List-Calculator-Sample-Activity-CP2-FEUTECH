@@ -4,8 +4,8 @@
 struct DataHolder
 {
 	const static int MAX = 2;
-	double val[MAX], result;
-	std::string mathOperator;
+	double val[MAX] = {0, 0}, result = 0;
+	std::string mathOperator = "";
 
 	void Display()
 	{
