@@ -62,7 +62,10 @@ This is the system created to understand the use cases of Linked List. Having Mu
 
 ### Version 1
 
-(To be written)
+#### Features
+- Calculation of MDAS
+- Logging of Computations
+- Deleting of Logs
 
 <br />
 
