@@ -65,7 +65,7 @@ This is the system created to understand the use cases of Linked List. Having Mu
 ### Full Calculator (Still on Works)
 Versions:
 - with Explanation
-- withou explanation
+- without explanation
 
 
 #### Features
