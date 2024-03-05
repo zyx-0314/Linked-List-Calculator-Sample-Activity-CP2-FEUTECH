@@ -215,8 +215,12 @@ void AddHistory(History*& head, History*& tail, History*& temp)
     system("cls");
 }
 
+// head are passed by value not reference so it will not be revised
 void DisplayHistory(History* head, int currentPage, int lastPage)
 {
+    // Starting Index computes where to start in the index
+    // counter will serve as the counter of how many displayed computations are present
+    // i will be the counter for each present nodes
     int counter = 0, startingIndex = (currentPage - 1) * 5, i = 0;
     // the condition sets that it will be true when the head is NULL
     if (!head)
