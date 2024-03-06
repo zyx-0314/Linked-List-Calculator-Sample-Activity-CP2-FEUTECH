@@ -23,7 +23,7 @@ struct History
 
 int MainMenu();
 int MathMenu();
-int HistoryMenu(int, int);
+int HistoryMenu(int, int, int);
 
 void AddHistory(History*&, History*&, History*&);
 void DisplayHistory(History*, int, int);
