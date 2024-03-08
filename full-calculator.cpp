@@ -150,16 +150,18 @@ void AddHistory(History*& head, History*& tail, History*& temp) {
 
 void DisplayHistory(History* head, int currentPage, int lastPage) {
     int counter = 0, startingIndex = (currentPage - 1) * 5, i = 0;
+    char buffer[80];
+    struct tm *timeinfo = localtime(&head->data->timestamp);
+    
     if (!head)
         cout << "-- No History Yet! --\n";
-    else {
+    else 
+    {
         cout << "Page " << currentPage << " of " << lastPage << "\n\n"
              << "History\n";
         while (head && counter < 5) {
             if (startingIndex <= i) {
                 head->data->Display(i + 1);
-                char buffer[80];
-                struct tm *timeinfo = localtime(&head->data->timestamp);
                 strftime(buffer,sizeof(buffer),"%c", timeinfo);
                 cout << "  (Added: " << buffer << ")\n";
                 counter++;
