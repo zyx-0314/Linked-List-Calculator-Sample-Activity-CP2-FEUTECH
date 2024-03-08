@@ -26,9 +26,6 @@ struct History {
     DataHolder* data = new DataHolder;
 };
 
-time_t getTimestamp() {
-    return time(nullptr);
-}
 
 int MainMenu();
 int MathMenu();
@@ -41,6 +38,7 @@ void Computation(int, History*&);
 int HistoryFunctionalities(int&, History*&, History*&);
 int UpdateHistory(History*&);
 int DeleteHistory(History*&, int);
+time_t GetTimestamp();
 
 double Add(double[], const int);
 double Subtract(double[], const int);
@@ -61,7 +59,7 @@ int main() {
                         break;
                     InputValue(temp);
                     Computation(choice, temp);
-                    temp->data->timestamp = getTimestamp();
+                    temp->data->timestamp = GetTimestamp();
                     AddHistory(head, tail, temp);
                     historyCounter++;
                 } while (true);
@@ -292,7 +290,7 @@ int UpdateHistory(History*& head) {
         Computation(MathMenu(), current);
 
         // Update the timestamp
-        current->data->timestamp = getTimestamp();
+        current->data->timestamp = GetTimestamp();
 
         cout << "History updated successfully!\n";
         system("pause");
@@ -336,6 +334,10 @@ int DeleteHistory(History*& head, int index) {
     delete temp;
     cout << "History deleted successfully!\n";
     return 0;
+}
+
+time_t GetTimestamp() {
+    return time(nullptr);
 }
 
 double Add(double val[], const int MAX) {
